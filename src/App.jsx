@@ -2,13 +2,17 @@ import { useState } from "react";
 
 export default function App() {
   const [history, setHistory] = useState([Array(9).fill(null)])
-  const currentSquare = history[history.length -1] 
-  const [isXnext, setIsXnext] = useState(true);
+  
+  const [currentMove, setCurrentMove] = useState(0)
+  const currentSquare = history[currentMove] 
+  const isXnext = currentMove % 2 === 0;
 
   const handleOnplay = (newSquare)=>{
-    setHistory([...history, newSquare]);
-    setIsXnext(!isXnext);
-    console.log("history",history)
+    const newHistory = [...history.slice(0, currentMove + 1), newSquare];
+    setHistory(newHistory);
+    setCurrentMove(newHistory.length - 1)
+   
+    
     
   }
 
@@ -134,7 +138,8 @@ export default function App() {
     }
     return null;
   }
-function jumpToMove(){
+function jumpToMove(nextMove){
+  setCurrentMove(nextMove)
   
 }
   const moves = history.map((square, index)=>{
@@ -147,7 +152,7 @@ function jumpToMove(){
 
     return (
       <li key ={index}>
-        <button onClick={()=>{jumpToMove(square)}}>{description}</button>
+        <button onClick={()=>{jumpToMove(index)}}>{description}</button>
       </li>
     )
   })
